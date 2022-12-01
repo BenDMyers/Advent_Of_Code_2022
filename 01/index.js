@@ -28,3 +28,12 @@ const totalCalories = elves.map(sum);
 const maxCalories = Math.max(...totalCalories);
 
 console.log(maxCalories);
+
+// Part 2
+function byCalories(elfA, elfB) {
+	return elfB - elfA;
+}
+
+const elvesByCalories = [...totalCalories].sort(byCalories);
+const [first, second, third] = elvesByCalories;
+console.log(first + second + third);
