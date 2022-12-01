@@ -1,39 +1,40 @@
-const fs = require('fs');
-const lines = fs
-	.readFileSync(`${__dirname}/.input`, 'utf-8')
-	.split('\n');
-
-/** @type {number[][]} */
-const elves = lines.reduce((elves, line) => {
-	let currentElfIndex = elves.length - 1;
-	let currentElf = elves[currentElfIndex];
-
-	if (line === '') {
-		currentElf = [];
-		elves.push(currentElf);
-	} else {
-		const calories = Number.parseInt(line);
-		currentElf.push(calories);
-	}
-
-	return elves;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+var fs = require('fs');
+var lines = fs
+    .readFileSync("".concat(__dirname, "/.input"), 'utf-8')
+    .split('\n');
+var elves = lines.reduce(function (elves, line) {
+    var currentElfIndex = elves.length - 1;
+    var currentElf = elves[currentElfIndex];
+    if (line === '') {
+        currentElf = [];
+        elves.push(currentElf);
+    }
+    else {
+        var calories = Number.parseInt(line);
+        currentElf.push(calories);
+    }
+    return elves;
 }, [[]]);
-
 // Part 1
 function sum(arr) {
-	return arr.reduce((total, addend) => (total + addend), 0);
+    return arr.reduce(function (total, addend) { return (total + addend); }, 0);
 }
-
-const totalCalories = elves.map(sum);
-const maxCalories = Math.max(...totalCalories);
-
+var totalCalories = elves.map(sum);
+var maxCalories = Math.max.apply(Math, totalCalories);
 console.log(maxCalories);
-
 // Part 2
 function byCalories(elfA, elfB) {
-	return elfB - elfA;
+    return elfB - elfA;
 }
-
-const elvesByCalories = [...totalCalories].sort(byCalories);
-const [first, second, third] = elvesByCalories;
+var elvesByCalories = __spreadArray([], totalCalories, true).sort(byCalories);
+var first = elvesByCalories[0], second = elvesByCalories[1], third = elvesByCalories[2];
 console.log(first + second + third);
