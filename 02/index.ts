@@ -6,36 +6,6 @@ const lines = fs
 	.map(line => line.split(' '));
 
 // Part 1
-// enum OpponentMoves {
-// 	rock = 'A',
-// 	paper = 'B',
-// 	scissors = 'C'
-// }
-
-// enum MyMoves {
-// 	rock = 'X',
-// 	paper = 'Y',
-// 	scissors = 'Z'
-// };
-
-// const equivalentMoves = {
-// 	[OpponentMoves.rock]: MyMoves.rock,
-// 	[OpponentMoves.paper]: MyMoves.paper,
-// 	[OpponentMoves.scissors]: MyMoves.scissors,
-// };
-
-// const winningMoves = {
-// 	[OpponentMoves.rock]: MyMoves.paper,
-// 	[OpponentMoves.paper]: MyMoves.scissors,
-// 	[OpponentMoves.scissors]: MyMoves.rock,
-// };
-
-// const moveScores = {
-// 	[MyMoves.rock]: 1,
-// 	[MyMoves.paper]: 2,
-// 	[MyMoves.scissors]: 3,
-// };
-
 type OpponentMove = 'A' | 'B' | 'C';
 type MyMove = 'X' | 'Y' | 'Z';
 type GameState = 'opponentWins' | 'iWin' | 'tie';
