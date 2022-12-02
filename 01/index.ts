@@ -1,5 +1,6 @@
-const fs = require('fs');
-const lines: string[] = fs
+import fs from 'fs';
+
+const lines = fs
 	.readFileSync(`${__dirname}/.input`, 'utf-8')
 	.split('\n');
 
