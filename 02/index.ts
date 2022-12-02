@@ -64,7 +64,7 @@ const moveBasedPoints: {[key in MyMove]: number} = {
 	Z: 3
 };
 
-let score = 0;
+let part1Score = 0;
 for (let match of lines) {
 	const [opponentMove, myMove] = match;
 
@@ -76,7 +76,41 @@ for (let match of lines) {
 	}
 
 	const matchPoints = gameStatePoints[gameState] + moveBasedPoints[(myMove as MyMove)];
-	score += matchPoints;
+	part1Score += matchPoints;
 }
 
-console.log(score);
+console.log(part1Score);
+
+// Part 2
+const losingMoves: {[key in OpponentMove]: MyMove} = {
+	A: 'Z',
+	B: 'X',
+	C: 'Y'
+};
+
+const strategies: {[key in 'X' | 'Y' | 'Z']: GameState} = {
+	X: 'opponentWins',
+	Y: 'tie',
+	Z: 'iWin'
+}
+
+let part2Score = 0;
+for (let match of lines) {
+	const [opponentMove, strategy] = match;
+	const targetedGameState = strategies[(strategy as 'X' | 'Y' | 'Z')];
+
+	let myMove: MyMove;
+
+	if (targetedGameState === 'tie') {
+		myMove = equivalentMoves[(opponentMove as OpponentMove)];
+	} else if (targetedGameState === 'opponentWins') {
+		myMove = losingMoves[(opponentMove as OpponentMove)];
+	} else {
+		myMove = winningMoves[(opponentMove as OpponentMove)];
+	}
+
+	const matchPoints = gameStatePoints[targetedGameState] + moveBasedPoints[myMove];
+	part2Score += matchPoints;
+}
+
+console.log(part2Score);
