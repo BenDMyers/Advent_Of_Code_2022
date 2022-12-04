@@ -40,3 +40,27 @@ for (const [first, second] of pairs) {
 	}
 }
 console.log(part1Total);
+
+// Part 2
+function hasOverlap(first: Range, second: Range) {
+	let startsFirst: Range;
+	let startsLater: Range;
+
+	if (first.start <= second.start) {
+		startsFirst = first;
+		startsLater = second;
+	} else {
+		startsFirst = second;
+		startsLater = first;
+	}
+
+	return startsLater.start <= startsFirst.end;
+}
+
+let part2Total = 0;
+for (const [first, second] of pairs) {
+	if (hasOverlap(first, second)) {
+		part2Total++;
+	}
+}
+console.log(part2Total);
