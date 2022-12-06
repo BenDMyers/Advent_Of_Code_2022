@@ -33,6 +33,6 @@ function findFirstUniqueWindow(dataStream: string[], windowSize: number) {
 }
 
 // Part 1
-findFirstUniqueWindow(dataStream, 4);
+console.log(findFirstUniqueWindow(dataStream, 4));
 // Part 2
-findFirstUniqueWindow(dataStream, 14);
+console.log(findFirstUniqueWindow(dataStream, 14));
