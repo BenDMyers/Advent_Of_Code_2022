@@ -4,17 +4,12 @@ const lines = fs
 	.readFileSync(`${__dirname}/.input`, 'utf-8')
 	.split('\n');
 
-
-type File = {
-	filename: string;
-	size: number;
-};
-
 type Directory = {
 	name: string;
 	files: {[key: string]: number};
 	subdirectories: {[key: string]: Directory};
 	parent?: Directory
+	totalSize?: number;
 };
 
 // Parse commands and their outputs
@@ -24,6 +19,7 @@ const root: Directory = {
 	subdirectories: {}
 };
 
+const allDirectories: Directory[] = [root];
 let workingDirectory = root;
 
 function changeDirectory(newDirectory: string) {
@@ -51,6 +47,7 @@ function listDirectory(contentDetails: string[]) {
 				subdirectories: {},
 				parent: workingDirectory
 			};
+			allDirectories.push(subdirectory);
 			workingDirectory.subdirectories[directoryName] = subdirectory;
 		} else {
 			const [fileSizeString, filename] = detail.split(' ');
@@ -87,6 +84,10 @@ do {
 
 // Part 1
 function getDirectorySize(directory: Directory): number {
+	if (directory.totalSize) {
+		return directory.totalSize;
+	}
+
 	const totalFileSizes = Object.values(directory.files)
 		.reduce((totalSize, fileSize) => {
 			return totalSize + fileSize;
@@ -97,7 +98,13 @@ function getDirectorySize(directory: Directory): number {
 			return totalSize + getDirectorySize(subdirectory);
 		}, 0);
 
-	return totalFileSizes + totalSubdirectorySizes;
+	const totalSize = totalFileSizes + totalSubdirectorySizes;
+	directory.totalSize = totalSize;
+	return totalSize;
+}
+
+function byDirectorySize(a: Directory, b: Directory) {
+	return getDirectorySize(a) - getDirectorySize(b);
 }
 
 const MAX_DIRECTORY_SIZE = 100_000;
@@ -119,5 +126,16 @@ const totalSizeOfDirectoriesUnderLimit = directoriesUnderLimit
 	.reduce((totalSize, directory) => {
 		return totalSize + getDirectorySize(directory);
 	}, 0);
-console.log(directoriesUnderLimit);
+// console.log(directoriesUnderLimit);
 console.log(totalSizeOfDirectoriesUnderLimit);
+
+// Part 2
+const MAX_DISK_SPACE = 70_000_000;
+const REQUIRED_UNUSED_SPACE = 30_000_000;
+const currentUsedSpace = getDirectorySize(root);
+const largeEnoughDirectories = allDirectories
+	.filter(directory => currentUsedSpace - getDirectorySize(directory) <= (MAX_DISK_SPACE - REQUIRED_UNUSED_SPACE));
+largeEnoughDirectories.sort(byDirectorySize);
+console.log(largeEnoughDirectories);
+const [smallestSufficientDirectory] = largeEnoughDirectories;
+console.log(getDirectorySize(smallestSufficientDirectory));
