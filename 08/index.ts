@@ -73,18 +73,67 @@ function isVisible(treeRow: number, treeCol: number) {
 
 let visibleTrees = 0;
 for (let row = 0; row < treeHeights.length; row++) {
-	let visibleRow = '';
 	for (let col = 0; col < treeHeights[0].length; col++) {
-		// console.log({row, col})
 		if (isVisible(row, col)) {
 			const height = treeHeights[row][col].toString();
-			visibleRow += height;
 			visibleTrees++;
-		} else {
-			visibleRow += ' ';
 		}
 	}
-	console.log(visibleRow);
 }
 
 console.log(visibleTrees);
+
+// Part 2
+function getScenicScore(currentRow: number, currentCol: number) {
+	if (isEdge(currentRow, currentCol)) {
+		return 0;
+	}
+
+	const currentHeight = treeHeights[currentRow][currentCol];
+
+	let scenicDistanceToTop = 0;
+	let scenicDistanceToBottom = 0;
+	let scenicDistanceToLeft = 0;
+	let scenicDistanceToRight = 0;
+
+	for (let r = currentRow - 1; r >= 0; r--) {
+		scenicDistanceToTop++;
+		if (treeHeights[r][currentCol] >= currentHeight) {
+			break;
+		}
+	}
+
+	for (let r = currentRow + 1; r < treeHeights.length; r++) {
+		scenicDistanceToBottom++;
+		if (treeHeights[r][currentCol] >= currentHeight) {
+			break;
+		}
+	}
+
+	for (let c = currentCol - 1; c >= 0; c--) {
+		scenicDistanceToLeft++;
+		if (treeHeights[currentRow][c] >= currentHeight) {
+			break;
+		}
+	}
+
+	for (let c = currentCol + 1; c < treeHeights[currentRow].length; c++) {
+		scenicDistanceToRight++;
+		if (treeHeights[currentRow][c] >= currentHeight) {
+			break;
+		}
+	}
+
+	const scenicScore = scenicDistanceToTop * scenicDistanceToBottom * scenicDistanceToLeft * scenicDistanceToRight;
+
+	return scenicScore;
+}
+
+let maxScenicScore = 0;
+for (let r = 0; r < treeHeights.length; r++) {
+	for (let c = 0; c < treeHeights[r].length; c++) {
+		const scenicScore = getScenicScore(r, c);
+		maxScenicScore = Math.max(maxScenicScore, scenicScore);
+	}
+}
+console.log(maxScenicScore);
