@@ -8,9 +8,11 @@ const treeHeights = fs
 		return heightStrings.map(height => Number.parseInt(height));
 	});
 
-console.log(treeHeights)
-
 // Part 1
+
+/**
+ * Determine whether the provided coordinate is on the edge of the grid
+ */
 function isEdge(row: number, col: number) {
 	return (
 		row === 0 ||
@@ -20,6 +22,11 @@ function isEdge(row: number, col: number) {
 	);
 }
 
+/**
+ * Determines whether a provided tree can be seen from any edge, either because it's on
+ * the edge directly, or because any trees between it and the edge are shorter.
+ * @returns true if there are no taller/equal height trees between this tree and the edge
+ */
 function isVisible(treeRow: number, treeCol: number) {
 	if (isEdge(treeRow, treeCol)) {
 		return true;
@@ -28,41 +35,36 @@ function isVisible(treeRow: number, treeCol: number) {
 	const currentHeight = treeHeights[treeRow][treeCol];
 
 	const heightsFromTop: number[] = [];
-	const heightsFromBottom: number[] = [];
-	const heightsFromLeft: number[] = [];
-	const heightsFromRight: number[] = [];
-
 	for (let r = 0; r < treeRow; r++) {
 		heightsFromTop.push(treeHeights[r][treeCol]);
 	}
-
 	const visibleFromTop = heightsFromTop.every(height => height < currentHeight);
 	if (visibleFromTop) {
 		return true;
 	}
 	
+	const heightsFromBottom: number[] = [];
 	for (let r = treeRow + 1; r < treeHeights.length; r++) {
 		heightsFromBottom.push(treeHeights[r][treeCol]);
 	}
-
 	const visibleFromBottom = heightsFromBottom.every(height => height < currentHeight);
 	if (visibleFromBottom) {
 		return true;
 	}
 
+	const heightsFromLeft: number[] = [];
 	for (let c = 0; c < treeCol; c++) {
 		heightsFromLeft.push(treeHeights[treeRow][c]);
 	}
-
 	const visibleFromLeft = heightsFromLeft.every(height => height < currentHeight);
 	if (visibleFromLeft) {
 		return true;
 	}
 
+	const heightsFromRight: number[] = [];
 	for (let c = treeCol + 1; c < treeHeights[treeRow].length; c++) {
 		heightsFromRight.push(treeHeights[treeRow][c]);
 	}
-
 	const visibleFromRight = heightsFromRight.every(height => height < currentHeight);
 	if (visibleFromRight) {
 		return true;
@@ -75,7 +77,6 @@ let visibleTrees = 0;
 for (let row = 0; row < treeHeights.length; row++) {
 	for (let col = 0; col < treeHeights[0].length; col++) {
 		if (isVisible(row, col)) {
-			const height = treeHeights[row][col].toString();
 			visibleTrees++;
 		}
 	}
@@ -84,6 +85,12 @@ for (let row = 0; row < treeHeights.length; row++) {
 console.log(visibleTrees);
 
 // Part 2
+
+/**
+ * Gets the product of all viewing distances from the current tree to the edge
+ * or another tree of equal or greater height.
+ * @returns the product of all viewing distances
+ */
 function getScenicScore(currentRow: number, currentCol: number) {
 	if (isEdge(currentRow, currentCol)) {
 		return 0;
