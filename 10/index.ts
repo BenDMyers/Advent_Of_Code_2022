@@ -71,6 +71,7 @@ const instructions: Instruction[] = fs
 type Pixel = '#' | '.';
 
 (() => {
+	const SCREEN_WIDTH = 40;
 	const screen: Pixel[][] = [];
 
 	const part2Instructions = JSON.parse(JSON.stringify(instructions)) as Instruction[];
@@ -78,14 +79,17 @@ type Pixel = '#' | '.';
 	let spriteX = 1;
 
 	while (part2Instructions.length > 0) {
-		if (cycle % 40 === 1) {
-			const row: Pixel[] = new Array(40).fill('.');
+		// Cycles are 1-based — map to 0-based indexing
+		const crtX = (cycle - 1) % SCREEN_WIDTH;
+
+		if (crtX === 0) {
+			const row: Pixel[] = new Array(SCREEN_WIDTH).fill('.');
 			screen.push(row);
 		}
 
 		const currentRow = screen[screen.length - 1];
 		const spriteLocations = [spriteX - 1, spriteX, spriteX + 1];
-		const crtX = (cycle - 1) % 40;
+
 		if (spriteLocations.includes(crtX)) {
 			currentRow[crtX] = '#';
 		}
