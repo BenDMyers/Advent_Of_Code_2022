@@ -20,6 +20,11 @@ export function chunk<T>(array: T[], chunkSize: number) {
 	return chunks;
 }
 
+/**
+ * Adds up every number in the array and returns the total
+ * @param arr list of numbers
+ * @returns sum of all numbers in the array
+ */
 export function sum(arr: number[]) {
 	let total = 0;
 	for (const num of arr) {
