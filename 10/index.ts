@@ -66,3 +66,46 @@ const instructions: Instruction[] = fs
 	const totalMeasuredSignalStrengths = sum(measuredSignalStrengths);
 	console.log(totalMeasuredSignalStrengths);
 })();
+
+// Part 2
+type Pixel = '#' | '.';
+
+(() => {
+	const screen: Pixel[][] = [];
+
+	const part2Instructions = JSON.parse(JSON.stringify(instructions)) as Instruction[];
+	let cycle = 1;
+	let spriteX = 1;
+
+	while (part2Instructions.length > 0) {
+		if (cycle % 40 === 1) {
+			const row: Pixel[] = new Array(40).fill('.');
+			screen.push(row);
+		}
+
+		const currentRow = screen[screen.length - 1];
+		const spriteLocations = [spriteX - 1, spriteX, spriteX + 1];
+		const crtX = (cycle - 1) % 40;
+		if (spriteLocations.includes(crtX)) {
+			currentRow[crtX] = '#';
+		}
+
+		const currentInstruction = part2Instructions[0];
+		currentInstruction.remainingCycles--;
+
+		// Finalize and clear out the current task if it's spent its required cycles
+		if (currentInstruction.remainingCycles === 0) {
+			if (currentInstruction.operation === 'addx') {
+				spriteX += currentInstruction.value;
+			}
+
+			part2Instructions.shift();
+		}
+		
+		cycle++;
+	}
+
+	screen.forEach(row => {
+		console.log(row.join(''));
+	});
+})();
