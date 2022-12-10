@@ -19,3 +19,11 @@ export function chunk<T>(array: T[], chunkSize: number) {
 
 	return chunks;
 }
+
+export function sum(arr: number[]) {
+	let total = 0;
+	for (const num of arr) {
+		total += num;
+	}
+	return total;
+}
