@@ -5,5 +5,7 @@
  * @returns hypotenuse length
  */
 export function getHypotenuseLength(legA: number, legB: number) {
-	return Math.sqrt(Math.pow(legA, 2) + Math.pow(legB, 2));
+	const a_2 = legA * legA;
+	const b_2 = legB * legB;
+	return Math.sqrt(a_2 + b_2);
 }
